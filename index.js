@@ -1,11 +1,14 @@
 // config inicial
 const express = require('express')
+const cors = require("cors")
 const app = express()
 
 // depois do db
 const mongoose = require('mongoose')
 
-const Person = require('./models/Person')
+const User = require('./models/User')
+
+app.use(cors())
 
 app.use(
   express.urlencoded({
@@ -16,27 +19,41 @@ app.use(
 app.use(express.json())
 
 // rotas
-app.post('/person', async (req, res) => {
-  const { name, salary, approved } = req.body
-
-  const person = {
+app.post('/users', async (req, res) => {
+  const {   
     name,
-    salary,
-    approved,
+    age,
+    language,
+    operationArea, 
+    professionalSituation, 
+    experience, 
+    linkedin, 
+    github } = req.body
+
+  const user = {
+    name,
+    age,
+    language,
+    operationArea, 
+    professionalSituation, 
+    experience, 
+    linkedin, 
+    github
   }
 
   try {
-    await Person.create(person)
+    await User.create(user)
 
-    res.status(201).json({ message: 'Pessoa inserida no sistema com sucesso!' })
+    res.status(201).json(user, { message: 'Pessoa inserida no sistema com sucesso!' })
+    
   } catch (error) {
     res.status(500).json({ erro: error })
   }
 })
 
-app.get('/person', async (req, res) => {
+app.get('/users', async (req, res) => {
   try {
-    const people = await Person.find()
+    const people = await User.find()
 
     res.status(200).json(people)
   } catch (error) {
@@ -44,60 +61,73 @@ app.get('/person', async (req, res) => {
   }
 })
 
-app.get('/person/:id', async (req, res) => {
+app.get('/users/:id', async (req, res) => {
   const id = req.params.id
 
   try {
-    const person = await Person.findOne({ _id: id })
+    const user = await User.findOne({ _id: id })
 
-    if (!person) {
+    if (!user) {
       res.status(422).json({ message: 'Usuário não encontrado!' })
       return
     }
 
-    res.status(200).json(person)
+    res.status(200).json(user)
   } catch (error) {
     res.status(500).json({ erro: error })
   }
 })
 
-app.patch('/person/:id', async (req, res) => {
+app.patch('/users/:id', async (req, res) => {
   const id = req.params.id
 
-  const { name, salary, approved } = req.body
-
-  const person = {
+  const { 
     name,
-    salary,
-    approved,
+    age,
+    language,
+    operationArea, 
+    professionalSituation, 
+    experience, 
+    linkedin, 
+    github } = req.body
+
+  const user = {
+    name,
+    age,
+    language,
+    operationArea, 
+    professionalSituation, 
+    experience, 
+    linkedin, 
+    github
   }
 
   try {
-    const updatedPerson = await Person.updateOne({ _id: id }, person)
+    const updatedUser = await User.updateOne({ _id: id }, user)
 
-    if (updatedPerson.matchedCount === 0) {
+    if (updatedUser.matchedCount === 0) {
       res.status(422).json({ message: 'Usuário não encontrado!' })
       return
     }
 
-    res.status(200).json(person)
+    res.status(200).json(user)
   } catch (error) {
     res.status(500).json({ erro: error })
   }
 })
 
-app.delete('/person/:id', async (req, res) => {
+app.delete('/users/:id', async (req, res) => {
   const id = req.params.id
 
-  const person = await Person.findOne({ _id: id })
+  const user = await User.findOne({ _id: id })
 
-  if (!person) {
+  if (!user) {
     res.status(422).json({ message: 'Usuário não encontrado!' })
     return
   }
 
   try {
-    await Person.deleteOne({ _id: id })
+    await User.deleteOne({ _id: id })
 
     res.status(200).json({ message: 'Usuário removido com sucesso!' })
   } catch (error) {
@@ -111,10 +141,10 @@ app.get('/', (req, res) => {
 
 mongoose
   .connect(
-    'mongodb+srv://user:password@restfulapibanco.lq7ds.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+    'mongodb+srv://alemaobrk1:alemaobrk1@cluster0.nztnmoj.mongodb.net/?retryWrites=true&w=majority',
   )
   .then(() => {
     console.log('Conectou ao banco!')
-    app.listen(3000)
+    app.listen(3333)
   })
   .catch((err) => console.log(err))
