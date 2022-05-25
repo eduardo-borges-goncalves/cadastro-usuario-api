@@ -1,9 +1,7 @@
-// config inicial
 const express = require('express')
 const cors = require("cors")
 const app = express()
 
-// depois do db
 const mongoose = require('mongoose')
 
 const User = require('./models/User')
@@ -18,7 +16,6 @@ app.use(
 
 app.use(express.json())
 
-// rotas
 app.post('/users', async (req, res) => {
   const {   
     name,
@@ -30,7 +27,7 @@ app.post('/users', async (req, res) => {
     linkedin, 
     github } = req.body
 
-  const user = {
+  const userDB = {
     name,
     age,
     language,
@@ -42,9 +39,11 @@ app.post('/users', async (req, res) => {
   }
 
   try {
-    await User.create(user)
+    await User.create(userDB)
 
-    res.status(201).json(user, { message: 'Pessoa inserida no sistema com sucesso!' })
+    const user = await User.findOne({ name: name })
+
+    res.status(201).json({user, message: 'Pessoa inserida no sistema com sucesso!' })
     
   } catch (error) {
     res.status(500).json({ erro: error })
