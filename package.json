@@ -1,5 +1,5 @@
 {
-  "name": "17_API_REST_NODE_MONGOOSE_YT",
+  "name": "Api cad user",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "start": "nodemon ./index.js localhost 3000"
   },
   "keywords": [],
-  "author": "Matheus <matheus@horadecodar.com.br> (http://www.horadecodar.com.br/)",
+  "author": "Eduardo Borges",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
